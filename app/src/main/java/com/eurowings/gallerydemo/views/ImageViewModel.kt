@@ -30,7 +30,6 @@ class ImageViewModel : ViewModel() {
         imageDataSourceFactory = ImageDataFactory(request)
         itemPagedList = LivePagedListBuilder(imageDataSourceFactory, pagedListConfig)
             .build()
-        Thread.sleep(1000)
     }
 
 }
