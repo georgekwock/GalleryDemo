@@ -13,18 +13,18 @@ import retrofit2.Response
 /**
  * @author  Qing Guo
  */
-class ImageDataSource(galleryRequestInfo: GalleryRequestInfo) : PageKeyedDataSource<Int, Image>() {
+class ImageDataSource(private var requestInfo: GalleryRequestInfo) : PageKeyedDataSource<Int, Image>() {
     val FIRST_PAGE = 0
-    private var request = galleryRequestInfo
     private var api: ServerApi = RetrofitClientInstance.retrofitInstatce!!.create(ServerApi::class.java)
 
     override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, Image>) {
+        requestInfo
         api.getGallery(
-            request.section,
-            request.sort,
-            request.window,
-            request.page,
-            request.showViral
+            requestInfo.section,
+            requestInfo.sort,
+            requestInfo.window,
+            requestInfo.page,
+            requestInfo.showViral
         ).enqueue(object : Callback<ResponseImage> {
             override fun onFailure(call: Call<ResponseImage>, t: Throwable) {
 
@@ -43,11 +43,11 @@ class ImageDataSource(galleryRequestInfo: GalleryRequestInfo) : PageKeyedDataSou
 
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, Image>) {
         api.getGallery(
-            request.section,
-            request.sort,
-            request.window,
+            requestInfo.section,
+            requestInfo.sort,
+            requestInfo.window,
             params.key,
-            request.showViral
+            requestInfo.showViral
         ).enqueue(object : Callback<ResponseImage> {
             override fun onFailure(call: Call<ResponseImage>, t: Throwable) {
 
@@ -65,11 +65,11 @@ class ImageDataSource(galleryRequestInfo: GalleryRequestInfo) : PageKeyedDataSou
 
     override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, Image>) {
         api.getGallery(
-            request.section,
-            request.sort,
-            request.window,
+            requestInfo.section,
+            requestInfo.sort,
+            requestInfo.window,
             params.key,
-            request.showViral
+            requestInfo.showViral
         ).enqueue(object : Callback<ResponseImage> {
             override fun onFailure(call: Call<ResponseImage>, t: Throwable) {
 

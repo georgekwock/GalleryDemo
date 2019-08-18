@@ -21,15 +21,13 @@ class ImageViewModel : ViewModel() {
         .build()
 
     init {
-        imageDataSourceFactory = ImageDataFactory(GalleryRequestInfo())
+        imageDataSourceFactory = ImageDataFactory()
         itemPagedList = LivePagedListBuilder(imageDataSourceFactory, pagedListConfig)
             .build()
     }
 
     open fun updatePageList(request: GalleryRequestInfo) {
-        imageDataSourceFactory = ImageDataFactory(request)
-        itemPagedList = LivePagedListBuilder(imageDataSourceFactory, pagedListConfig)
-            .build()
+        imageDataSourceFactory.setRequest(request)
+        itemPagedList.value?.dataSource?.invalidate()
     }
-
 }

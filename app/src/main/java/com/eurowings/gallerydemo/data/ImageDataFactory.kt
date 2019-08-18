@@ -9,13 +9,24 @@ import com.eurowings.gallerydemo.Image
 /**
  * @author  Qing Guo
  */
-class ImageDataFactory(request: GalleryRequestInfo) : DataSource.Factory<Int, Image>() {
+class ImageDataFactory : DataSource.Factory<Int, Image>() {
     private val imageLiveDataSource = MutableLiveData<PageKeyedDataSource<Int, Image>>()
-    private val request = request
+    private lateinit var imageDataSource: ImageDataSource
+    private var requestInfo = GalleryRequestInfo()
+
     override fun create(): DataSource<Int, Image> {
-        val imageDataSource = ImageDataSource(request)
+        getRequest()
+        imageDataSource = ImageDataSource(requestInfo)
         imageLiveDataSource.postValue(imageDataSource)
         return imageDataSource
+    }
+
+    fun setRequest(request: GalleryRequestInfo) {
+        requestInfo = request
+    }
+
+    fun getRequest(): GalleryRequestInfo {
+        return requestInfo
     }
 
     fun getImageLiveDataSource(): MutableLiveData<PageKeyedDataSource<Int, Image>> {
